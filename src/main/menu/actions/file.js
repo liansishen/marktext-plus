@@ -3,7 +3,7 @@ import path from 'path'
 import { BrowserWindow, app, dialog, shell, ipcMain } from 'electron'
 import log from 'electron-log'
 import { isDirectory, isFile, exists } from 'common/filesystem'
-import { MARKDOWN_EXTENSIONS, isMarkdownFile } from 'common/filesystem/paths'
+import { MARKDOWN_EXTENSIONS, hasMarkdownExtension, isMarkdownFile } from 'common/filesystem/paths'
 import { checkUpdates, userSetting } from './marktext'
 import { showTabBar } from './view'
 import { COMMANDS } from '../../commands'
@@ -501,8 +501,15 @@ ipcMain.on('mt::format-link-click', (e, { data, dirname }) => {
   if (pathname) {
     // decodeURIComponent() CommonMark #503, allow percent encoded path names to open files.
     pathname = path.normalize(decodeURIComponent(pathname))
-    const win = BrowserWindow.fromWebContents(e.sender)
-    openFileOrFolder(win, pathname)
+    const resolvedPath = normalizeAndResolvePath(pathname)
+
+    if (resolvedPath && isFile(resolvedPath) && !hasMarkdownExtension(resolvedPath)) {
+      // Open non-markdown files (e.g. .docx, .xlsx, .pdf) with the OS default app
+      shell.openPath(resolvedPath)
+    } else {
+      const win = BrowserWindow.fromWebContents(e.sender)
+      openFileOrFolder(win, pathname)
+    }
   }
 })
 
