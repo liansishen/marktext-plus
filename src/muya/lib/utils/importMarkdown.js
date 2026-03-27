@@ -457,10 +457,12 @@ const importRegister = (ContentState) => {
    * Get the cursor position in muya index.
    */
   ContentState.prototype.getMuyaIndexCursor = function () {
+    const defaultCursor = { anchor: { line: 0, ch: 0 }, focus: { line: 0, ch: 0 } }
     const blocks = this.getBlocks()
     const { anchor, focus } = this.cursor
     const anchorBlock = this.getBlock(anchor.key)
     const focusBlock = this.getBlock(focus.key)
+    if (!anchorBlock || !focusBlock) return defaultCursor
     const { text: anchorText } = anchorBlock
     const { text: focusText } = focusBlock
     if (anchor.key === focus.key) {
