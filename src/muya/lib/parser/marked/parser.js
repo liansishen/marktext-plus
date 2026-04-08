@@ -151,6 +151,16 @@ Parser.prototype.tok = function () {
 
       return this.renderer.blockquote(body)
     }
+    case 'alert_start': {
+      let body = ''
+      const alertType = this.token.alertType
+
+      while (this.next().type !== 'alert_end') {
+        body += this.tok()
+      }
+
+      return this.renderer.alert(body, alertType)
+    }
     // All the tokens will be footnotes if it after a footnote_start token. Because we put all footnote token at the end.
     case 'footnote_start': {
       let body = ''

@@ -1,15 +1,47 @@
-node_modules
-dist
-out
+```
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+build/
+target/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.ENV
+.ENV.*
+.venv/
+.venv.*
+
+# Logs
+*.log
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# OS
 .DS_Store
-.prettierignore
-.eslintcache
-*.log*
-.trae/
-.cursor/
-doc/
-# Ignore temp artifacts
-temp/
-logs/
-*.min.json
-.claude/settings.local.json
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*
+```

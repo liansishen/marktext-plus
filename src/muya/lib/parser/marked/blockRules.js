@@ -13,6 +13,7 @@ export const block = {
   hr: /^ {0,3}((?:- *){3,}|(?:_ *){3,}|(?:\* *){3,})(?:\n+|$)/,
   heading: /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/,
   blockquote: /^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/,
+  alert: /^( {0,3}> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\](?:[ \t]*\n?)(?:[ \t]*>[^\n]*\n?)*(?:\n|$))+/,
   list: /^( {0,3})(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,
   html: '^ {0,3}(?:' + // optional indentation
     '<(script|pre|style)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)' + // (1)

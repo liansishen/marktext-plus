@@ -337,6 +337,29 @@ Lexer.prototype.token = function (
       continue
     }
 
+    // alert (GitHub-style callouts)
+    cap = this.rules.alert.exec(src)
+    if (cap) {
+      src = src.substring(cap[0].length)
+
+      const alertType = cap[2].toLowerCase()
+      const alertContent = cap[0].replace(/^ *> ?\[!(?:NOTE|TIP|IMPORTANT|WARNING|CAUTION)\][ \t]*\n?/i, '').replace(/^ *> ?/gm, '')
+
+      this.tokens.push({
+        type: 'alert_start',
+        alertType
+      })
+
+      this.token(alertContent, top, null, checkCursorSignature)
+
+      this.tokens.push({
+        type: 'alert_end',
+        alertType
+      })
+
+      continue
+    }
+
     // NOTE: Complete list lexer part is a custom implementation based on an older marked.js version.
 
     // list

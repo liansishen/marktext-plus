@@ -90,6 +90,10 @@ Renderer.prototype.blockquote = function (quote) {
   return '<blockquote>\n' + quote + '</blockquote>\n'
 }
 
+Renderer.prototype.alert = function (quote, alertType) {
+  return '<div class="markdown-alert markdown-alert-' + alertType + '">\n' + quote + '</div>\n'
+}
+
 Renderer.prototype.html = function (html) {
   return html
 }
