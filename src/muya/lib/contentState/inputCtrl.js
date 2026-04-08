@@ -4,6 +4,8 @@ import { beginRules } from '../parser/rules'
 import { tokenizer } from '../parser/'
 import { CLASS_OR_ID } from '../config'
 
+const GITHUB_ALERT_REG = /^\[!(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]/
+
 const BRACKET_HASH = {
   '{': '}',
   '[': ']',
@@ -37,6 +39,55 @@ const inputCtrl = (ContentState) => {
     const { type, text, functionType } = block
     if (type !== 'span' || functionType !== 'paragraphContent') return false
     return /^@\S*$/.test(text)
+  }
+
+  /**
+   * Check if the block's parent blockquote should be a GitHub Alert.
+   * Called when text changes inside a blockquote.
+   */
+  ContentState.prototype.checkBlockquoteAlert = function (block) {
+    // Only check paragraphContent inside a blockquote
+    if (block.type !== 'span' || block.functionType !== 'paragraphContent') {
+      return false
+    }
+
+    const parent = this.getParent(block)
+    if (!parent) return false
+
+    const grandParent = this.getParent(parent)
+    if (!grandParent || grandParent.type !== 'blockquote') return false
+
+    // Check the first span content in the blockquote
+    const firstChild = grandParent.children[0]
+    if (!firstChild) return false
+
+    let firstSpan = null
+    if (firstChild.type === 'p' && firstChild.children.length > 0) {
+      firstSpan = firstChild.children[0]
+    } else if (firstChild.type === 'span') {
+      firstSpan = firstChild
+    }
+
+    // Get the first span's text and check for alert pattern
+    const targetSpan = firstSpan || block
+    const text = targetSpan.text
+
+    const alertMatch = text.match(GITHUB_ALERT_REG)
+    const oldAlertType = grandParent.alertType || ''
+
+    if (alertMatch) {
+      const newAlertType = alertMatch[1].toLowerCase()
+      if (oldAlertType !== newAlertType) {
+        grandParent.alertType = newAlertType
+        return true
+      }
+    } else if (oldAlertType) {
+      // No longer matches alert pattern, remove alertType
+      delete grandParent.alertType
+      return true
+    }
+
+    return false
   }
 
   ContentState.prototype.checkCursorInTokenType = function (functionType, text, offset, type) {
@@ -358,6 +409,12 @@ const inputCtrl = (ContentState) => {
     let inlineUpdatedBlock = null
     if (/atxLine|paragraphContent|cellContent|thematicBreakLine/.test(block.functionType)) {
       inlineUpdatedBlock = this.isCollapse() && this.checkInlineUpdate(block)
+    }
+
+    // Check for GitHub Alert type change in blockquote
+    const alertUpdated = this.checkBlockquoteAlert(block)
+    if (alertUpdated) {
+      needRender = true
     }
 
     // just for fix #707,need render All if in combines pre list and next list into one list.

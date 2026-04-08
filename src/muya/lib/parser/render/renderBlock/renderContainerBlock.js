@@ -34,7 +34,8 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     bulletMarkerOrDelimiter,
     isLooseListItem,
     lang,
-    column
+    column,
+    alertType
   } = block
 
   if (type === 'table') {
@@ -169,6 +170,10 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     selector += `.${CLASS_OR_ID.AG_LIST_ITEM}`
     selector += `.ag-${listItemType}-list-item`
     selector += isLooseListItem ? `.${CLASS_OR_ID.AG_LOOSE_LIST_ITEM}` : `.${CLASS_OR_ID.AG_TIGHT_LIST_ITEM}`
+  } else if (type === 'blockquote' && alertType) {
+    selector += `.${CLASS_OR_ID.AG_ALERT}`
+    selector += `.ag-alert-${alertType}`
+    Object.assign(data.dataset, { alert: alertType })
   } else if (type === 'pre') {
     Object.assign(data.attrs, { spellcheck: 'false' })
     Object.assign(data.dataset, { role: functionType })

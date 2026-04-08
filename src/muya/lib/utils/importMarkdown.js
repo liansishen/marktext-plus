@@ -345,6 +345,15 @@ const importRegister = (ContentState) => {
           break
         }
 
+        case 'alert_type': {
+          // GitHub Alert type marker [!NOTE], [!TIP], [!WARNING], [!IMPORTANT], [!CAUTION]
+          // Set alertType on the parent blockquote
+          if (parentList[0] && parentList[0].type === 'blockquote') {
+            parentList[0].alertType = token.alertType
+          }
+          break
+        }
+
         case 'blockquote_end': {
           // Fix #1735 the blockquote maybe empty.
           if (parentList[0].children.length === 0) {
