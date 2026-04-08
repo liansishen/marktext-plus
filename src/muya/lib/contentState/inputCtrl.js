@@ -57,7 +57,7 @@ const inputCtrl = (ContentState) => {
     const grandParent = this.getParent(parent)
     if (!grandParent || grandParent.type !== 'blockquote') return false
 
-    // Check the first span content in the blockquote
+    // Only check the first paragraph's first span in the blockquote
     const firstChild = grandParent.children[0]
     if (!firstChild) return false
 
@@ -68,10 +68,9 @@ const inputCtrl = (ContentState) => {
       firstSpan = firstChild
     }
 
-    // Get the first span's text and check for alert pattern
-    const targetSpan = firstSpan || block
-    const text = targetSpan.text
+    if (firstSpan !== block) return false
 
+    const text = block.text
     const alertMatch = text.match(GITHUB_ALERT_REG)
     const oldAlertType = grandParent.alertType || ''
 
