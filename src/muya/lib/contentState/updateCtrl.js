@@ -516,6 +516,12 @@ const updateCtrl = (ContentState) => {
         quoteLines.push(l)
       }
     }
+
+    // Check if the first line of the blockquote is a GitHub Alert marker
+    const alertType = quoteLines.length > 0 && /^\[!(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]/.test(quoteLines[0])
+      ? quoteLines[0].match(/^\[!(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]/)[1].toLowerCase()
+      : null
+
     let quoteParagraphBlock
     if (/^h\d/.test(block.type)) {
       quoteParagraphBlock = this.createBlock(block.type, {
@@ -533,7 +539,7 @@ const updateCtrl = (ContentState) => {
       quoteParagraphBlock = this.createBlockP(quoteLines.join('\n'))
     }
 
-    const quoteBlock = this.createBlock('blockquote')
+    const quoteBlock = this.createBlock('blockquote', alertType ? { alertType } : {})
     this.appendChild(quoteBlock, quoteParagraphBlock)
     this.insertBefore(quoteBlock, block)
 

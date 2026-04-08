@@ -323,6 +323,15 @@ Lexer.prototype.token = function (
         type: 'blockquote_start'
       })
 
+      // Check for GitHub Alert type marker on the first line: [!NOTE], [!TIP], [!WARNING], [!IMPORTANT], [!CAUTION]
+      const alertMatch = cap[0].match(/^ *> ?\[(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]\s*\n?/)
+      if (alertMatch) {
+        this.tokens.push({
+          type: 'alert_type',
+          alertType: alertMatch[1].toLowerCase()
+        })
+      }
+
       cap = cap[0].replace(/^ *> ?/gm, '')
 
       // Pass `top` to keep the current

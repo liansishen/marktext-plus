@@ -405,6 +405,68 @@ kbd {
     padding-right: 0;
   }
 
+  /* GitHub Alert styles */
+  blockquote.ag-alert {
+    border-left: 4px solid var(--editorColor10);
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin: 8px 0;
+  }
+
+  blockquote.ag-alert::before {
+    display: none;
+  }
+
+  blockquote.ag-alert-note {
+    border-left-color: #0969da;
+    background: rgba(9, 105, 218, 0.1);
+  }
+
+  blockquote.ag-alert-note > p:first-of-type {
+    color: #0969da;
+    font-weight: 600;
+  }
+
+  blockquote.ag-alert-tip {
+    border-left-color: #1a7f37;
+    background: rgba(26, 127, 55, 0.1);
+  }
+
+  blockquote.ag-alert-tip > p:first-of-type {
+    color: #1a7f37;
+    font-weight: 600;
+  }
+
+  blockquote.ag-alert-warning {
+    border-left-color: #9a6700;
+    background: rgba(154, 103, 0, 0.1);
+  }
+
+  blockquote.ag-alert-warning > p:first-of-type {
+    color: #9a6700;
+    font-weight: 600;
+  }
+
+  blockquote.ag-alert-important {
+    border-left-color: #8250df;
+    background: rgba(130, 80, 223, 0.1);
+  }
+
+  blockquote.ag-alert-important > p:first-of-type {
+    color: #8250df;
+    font-weight: 600;
+  }
+
+  blockquote.ag-alert-caution {
+    border-left-color: #cf222e;
+    background: rgba(207, 34, 46, 0.1);
+  }
+
+  blockquote.ag-alert-caution > p:first-of-type {
+    color: #cf222e;
+    font-weight: 600;
+  }
+
   table {
     padding: 0;
     word-break: initial;
